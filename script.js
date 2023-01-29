@@ -6,20 +6,22 @@ document.querySelectorAll("button").forEach(button => button.addEventListener("c
     let calcScreen = document.querySelector("#screen");
     
     if (button.classList.contains("number") && operator == "") {
-        num1 += button.textContent;
-        calcScreen.textContent = num1;
+        calcScreen.textContent += button.textContent;;
     }
     else if(button.classList.contains("number")) {
-        num2 += button.textContent;
-        calcScreen.textContent = num2;
+        calcScreen.textContent += button.textContent;
+    }
+    else if(button.id === "decimal") {
+        if (calcScreen.textContent.includes(".")) return;
+        calcScreen.textContent += ".";
     }
     else if (button.classList.contains("operator")) {
+        num1 = parseFloat(calcScreen.textContent)
         operator = button.textContent;
         calcScreen.textContent = operator;
     }
     else if (button.id === "equal-operator") {
-        num1 = parseInt(num1);
-        num2 = parseInt(num2);
+        num2 = parseFloat(calcScreen.textContent);
         result = calculate(num1, num2, operator);
         num1 = result;
         operator = "";
@@ -34,13 +36,18 @@ function calculate(a, b, operator) {
     let result;
     switch (operator) {
         case "+":
-            result = add(a, b)
+            result = a + b;
             break;
+        case "-":
+            result = a - b;
+            break;
+        case "x":
+            result = a . b;
+            break;
+        case "/":
+            result = a / b;
+            break
     }
 
     return result;
-}
-
-function add(a, b) {
-    return a + b;
 }
