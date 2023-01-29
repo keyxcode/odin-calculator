@@ -11,7 +11,7 @@ html {
 }
 
 body {
-    background-color: var(--lightest);
+    background-color: var(--light);
 }
 
 .container {
@@ -29,7 +29,7 @@ body {
 }
 
 #screen {
-    background-color: var(--light);
+    background-color: var(--lightest);
     height: 50px;
     text-align: right;
     padding: 10px;
