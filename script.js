@@ -42,7 +42,7 @@ function calculate(a, b, operator) {
             result = a - b;
             break;
         case "x":
-            result = a . b;
+            result = a * b;
             break;
         case "/":
             result = a / b;
