@@ -1,0 +1,33 @@
+:root {
+    --darkest: #EFA7A7;
+    --dark: #FCBCB8;
+    --button: #FFD972;
+    --light: #A7E8BD;
+    --lightest: #C7EAE4;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--lightest);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 200px;
+}
+
+#calc-body {
+    background-color: var(--darkest);
+    width: 400px;
+    padding: 20px;
+}
+
+#screen {
+    background-color: var(--light);
+    height: 50px;
+}
