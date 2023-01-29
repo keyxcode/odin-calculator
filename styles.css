@@ -30,4 +30,16 @@ body {
 #screen {
     background-color: var(--light);
     height: 50px;
+    text-align: right;
+    padding: 10px;
+}
+
+#screen-equation {
+    height: 20px;
+}
+
+button {
+    outline: none;
+    background: var(--button);
+    border: 1px solid var(--lightest);
 }

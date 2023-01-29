@@ -3,29 +3,29 @@ let num2 = "";
 let operator = "";
 
 document.querySelectorAll("button").forEach(button => button.addEventListener("click", () => {
-    let calcScreen = document.querySelector("#screen");
+    let screenEquation = document.querySelector("#screen-equation");
+    let screenNumber = document.querySelector("#screen-number");
     
-    if (button.classList.contains("number") && operator == "") {
-        calcScreen.textContent += button.textContent;;
-    }
-    else if(button.classList.contains("number")) {
-        calcScreen.textContent += button.textContent;
-    }
-    else if(button.id === "decimal") {
-        if (calcScreen.textContent.includes(".")) return;
-        calcScreen.textContent += ".";
+    if (button.classList.contains("number")) {
+        if (button.id === "decimal" && screenNumber.textContent.includes(".")) return;
+        screenNumber.textContent += button.textContent;
     }
     else if (button.classList.contains("operator")) {
-        num1 = parseFloat(calcScreen.textContent)
+        num1 = parseFloat(screenNumber.textContent)
         operator = button.textContent;
-        calcScreen.textContent = operator;
+        screenEquation.textContent = `${num1} ${operator}`;
+        screenNumber.textContent = "";
     }
     else if (button.id === "equal-operator") {
-        num2 = parseFloat(calcScreen.textContent);
+        if (operator) num2 = parseFloat(screenNumber.textContent)
+        else return;
+
         result = calculate(num1, num2, operator);
+        screenNumber.textContent = result;
+        screenEquation.textContent = `${num1} ${operator} ${num2} =`
+    
         num1 = result;
         operator = "";
-        calcScreen.textContent = result;
     }
 }))
 
