@@ -1,58 +1,73 @@
 let num1 = "";
 let num2 = "";
-let operator = "";
-let ans = "";
+let currentOperator = "";
+let chainedOperator = "";
 
 const screenEquation = document.querySelector("#screen-equation");
 const screenNumber = document.querySelector("#screen-number");
 
 document.querySelectorAll(".number").forEach(button => button.addEventListener('click', () => {
     if (button.id === "decimal" && screenNumber.textContent.includes(".")) return;
-    // if (screenNumber.textContent == "0") screenNumber.textContent = "";
+    if (screenNumber.textContent == "0") screenNumber.textContent = "";
     screenNumber.textContent += button.textContent;
 }))
 
 document.querySelectorAll(".operator").forEach(button => button.addEventListener("click", () => {
-    operator = button.textContent;
-    screenEquation.textContent = `${num1} ${operator}`;
+    screenEquation.textContent = `${num1} ${currentOperator}`;
 
-    if (!num1 && !num2) {
+    if (num1 === "" && num2 === "") {
         num1 = parseFloat(screenNumber.textContent);
 
-        screenEquation.textContent = `${num1} ${operator}`;
+        currentOperator = button.textContent;
+        screenEquation.textContent = `${num1} ${currentOperator}`;
         screenNumber.textContent = "";
-    } else if (!num2) {
-        num2 = parseFloat(screenNumber.textContent);
-        if (!num2) return;
-        result = calculate(num1, num2, operator);
-
-        screenEquation.textContent = `${result} ${operator}`;
-        screenNumber.textContent = "";
-        num1 = result;
-        num2 = "";
     } else {
-        result = calculate(num1, num2, operator);
-        screenEquation.textContent = calculate(num1, num2, operator);
-        screenNumber.textContent = "";
+        // In this case, num1 is already in memory
+        // if there's nothing in the screenNumber, that means user wants to change operator
+        if (screenNumber.textContent === "") {
+            currentOperator = button.textContent; 
+            screenEquation.textContent = `${num1} ${currentOperator}`;
+        }
 
+        // otherwise, parse num2, calculate based on currentOperator and save chainedOperator in memory
+        chainedOperator = button.textContent;
+        num2 = parseFloat(screenNumber.textContent);
+        if (isNaN(num2)) {
+            return;
+        };
+
+        result = calculate(num1, num2, currentOperator);
+        screenEquation.textContent = `${result} ${chainedOperator}`;
+        screenNumber.textContent = "";
         num1 = result;
         num2 = "";
+        currentOperator = chainedOperator;
+        chainedOperator = "";
     }
 }))
 
 document.querySelector("#equal-operator").addEventListener('click', () => {
-    if (operator) num2 = parseFloat(screenNumber.textContent)
+    if (currentOperator) num2 = parseFloat(screenNumber.textContent);
     else return;
+    if (isNaN(num2)) {
+        return;
+    };
 
-    result = calculate(num1, num2, operator);
-    screenEquation.textContent = `${num1} ${operator} ${num2} =`
+    result = calculate(num1, num2, currentOperator);
+    screenEquation.textContent = `${num1} ${currentOperator} ${num2} =`
     screenNumber.textContent = result;
-
     num1 = result;
+    num2 = "";
+    currentOperator = "";
 })
 
 document.querySelector("#ac").addEventListener('click', () => {
     clear();
+})
+
+document.querySelector("#del").addEventListener('click', () => {
+    if (screenNumber.textContent === "") screenNumber.textContent = "0";
+    screenNumber.textContent = screenNumber.textContent.split('').slice(0, -1).join('');
 })
 
 function calculate(a, b, operator) {
@@ -75,13 +90,25 @@ function calculate(a, b, operator) {
             break
     }
 
+    if (result > Number.MAX_VALUE) showError();
+
     return result;
 }
 
 function clear() {
     num1 = "";
     num2 = "";
-    operator = "";
+    currentOperator = "";
+    chainedOperator = "";
     screenEquation.textContent = "";
-    screenNumber.textContent = "";
+    screenNumber.textContent = "0";
+}
+
+function showError() {
+    num1 = "";
+    num2 = "";
+    currentOperator = "";
+    chainedOperator = "";
+    screenEquation.textContent = "";
+    screenNumber.textContent = "ERROR";
 }
