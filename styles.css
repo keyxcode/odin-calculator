@@ -42,7 +42,7 @@ body {
 
 #screen {
     background-color: var(--lightest);
-    font-size: 35px;
+    font-size: x-large;
     text-align: right;
     padding: 10px 10px 10px 50px !important;
     margin-bottom: 20px;

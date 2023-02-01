@@ -10,29 +10,32 @@ document.querySelectorAll(".number").forEach(button => button.addEventListener('
     if (button.id === "decimal" && screenNumber.textContent.includes(".")) return;
     if (num1 != "" && currentOperator === "") clear();
     if (screenNumber.textContent === "0" && button.textContent != ".") screenNumber.textContent = "";
+
+    screenNumber.textContent = removeCommasFromNumber(screenNumber.textContent);
     screenNumber.textContent += button.textContent;
+    screenNumber.textContent = addCommasToNumber(screenNumber.textContent);
 }))
 
 document.querySelectorAll(".operator").forEach(button => button.addEventListener("click", () => {
-    screenEquation.textContent = `${num1} ${currentOperator}`;
+    screenEquation.textContent = `${addCommasToNumber(num1)} ${currentOperator}`;
 
     if (num1 === "" && num2 === "") {
-        num1 = parseFloat(screenNumber.textContent);
+        num1 = parseFloat(removeCommasFromNumber(screenNumber.textContent));
 
         currentOperator = button.textContent;
-        screenEquation.textContent = `${num1} ${currentOperator}`;
+        screenEquation.textContent = `${addCommasToNumber(num1)} ${currentOperator}`;
         screenNumber.textContent = "";
     } else {
-        // In this case, num1 is already in memory
+        // num1 is already in memory
         // if there's nothing in the screenNumber, that means user wants to change operator
         if (screenNumber.textContent === "") {
             currentOperator = button.textContent; 
-            screenEquation.textContent = `${num1} ${currentOperator}`;
+            screenEquation.textContent = `${addCommasToNumber(num1)} ${currentOperator}`;
         }
 
         // otherwise, parse num2, calculate based on currentOperator and save chainedOperator in memory
         chainedOperator = button.textContent;
-        num2 = parseFloat(screenNumber.textContent);
+        num2 = parseFloat(removeCommasFromNumber(screenNumber.textContent));
         if (isNaN(num2)) {
             return;
         };
@@ -42,7 +45,7 @@ document.querySelectorAll(".operator").forEach(button => button.addEventListener
             showError();
             return;
         }
-        screenEquation.textContent = `${result} ${chainedOperator}`;
+        screenEquation.textContent = `${addCommasToNumber(result)} ${chainedOperator}`;
         screenNumber.textContent = "";
         num1 = result;
         num2 = "";
@@ -52,7 +55,7 @@ document.querySelectorAll(".operator").forEach(button => button.addEventListener
 }))
 
 document.querySelector("#equal-operator").addEventListener('click', () => {
-    if (currentOperator) num2 = parseFloat(screenNumber.textContent);
+    if (currentOperator) num2 = parseFloat(screenNumber.textContent.replace(/,/g, ''));
     else return;
     if (isNaN(num2)) {
         return;
@@ -63,8 +66,8 @@ document.querySelector("#equal-operator").addEventListener('click', () => {
         showError();
         return;
     }
-    screenEquation.textContent = `${num1} ${currentOperator} ${num2} =`
-    screenNumber.textContent = result;
+    screenEquation.textContent = `${addCommasToNumber(num1)} ${currentOperator} ${addCommasToNumber(num2)} =`
+    screenNumber.textContent = addCommasToNumber(result);
     num1 = result;
     num2 = "";
     currentOperator = "";
@@ -136,4 +139,23 @@ function showError() {
         if (button.id === "ac") return
         else button.setAttribute("disabled", "true");
     })
+}
+
+function removeCommasFromNumber(number) {
+    if (typeof(number) != "string") number = number.toString();
+    return number.replace(/\,/g,'');
+}
+
+function addCommasToNumber(number) {
+    if (typeof(number) != "string") number = number.toString();
+    const regexPattern = /(\d)(?=(\d{3})+$)/g;
+
+    if (number.includes(".")) {
+        splitNumber = number.split(".");
+        wholeNumber = splitNumber[0].replace(regexPattern, "$1,");
+        fractionNumber = splitNumber[1];
+        return number = `${wholeNumber}.${fractionNumber}`;
+    } else {
+        return number.replace(regexPattern, "$1,");
+    }
 }
