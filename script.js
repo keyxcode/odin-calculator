@@ -8,7 +8,8 @@ const screenNumber = document.querySelector("#screen-number");
 
 document.querySelectorAll(".number").forEach(button => button.addEventListener('click', () => {
     if (button.id === "decimal" && screenNumber.textContent.includes(".")) return;
-    if (screenNumber.textContent == "0") screenNumber.textContent = "";
+    if (num1 != "" && currentOperator === "") clear();
+    if (screenNumber.textContent === "0" && button.textContent != ".") screenNumber.textContent = "";
     screenNumber.textContent += button.textContent;
 }))
 
@@ -76,6 +77,7 @@ document.querySelector("#ac").addEventListener('click', () => {
 document.querySelector("#del").addEventListener('click', () => {
     // In this case, this is showing a result, not in the process of inputting a number
     if (num1 && !currentOperator) return;
+    if (screenNumber.textContent === "") return;
 
     screenNumber.textContent = screenNumber.textContent.split('').slice(0, -1).join('');
     if (screenNumber.textContent === "") screenNumber.textContent = "0";
@@ -104,8 +106,8 @@ function calculate(a, b, operator) {
             break
     }
 
-    if (result > Number.MAX_VALUE) showError();
-
+    let numDecimal = 10000000;
+    result = Math.round(result * numDecimal) / numDecimal;
     return result;
 }
 
