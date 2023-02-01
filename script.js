@@ -37,6 +37,10 @@ document.querySelectorAll(".operator").forEach(button => button.addEventListener
         };
 
         result = calculate(num1, num2, currentOperator);
+        if (result === "ERROR") {
+            showError();
+            return;
+        }
         screenEquation.textContent = `${result} ${chainedOperator}`;
         screenNumber.textContent = "";
         num1 = result;
@@ -54,6 +58,10 @@ document.querySelector("#equal-operator").addEventListener('click', () => {
     };
 
     result = calculate(num1, num2, currentOperator);
+    if (result === "ERROR") {
+        showError();
+        return;
+    }
     screenEquation.textContent = `${num1} ${currentOperator} ${num2} =`
     screenNumber.textContent = result;
     num1 = result;
@@ -89,6 +97,9 @@ function calculate(a, b, operator) {
             result = a * b;
             break;
         case "/":
+            if (b === 0) {
+                return "ERROR";
+            }
             result = a / b;
             break
     }
@@ -105,6 +116,10 @@ function clear() {
     chainedOperator = "";
     screenEquation.textContent = "";
     screenNumber.textContent = "0";
+
+    document.querySelectorAll("button").forEach(button => {
+        button.removeAttribute("disabled");
+    })
 }
 
 function showError() {
@@ -114,4 +129,9 @@ function showError() {
     chainedOperator = "";
     screenEquation.textContent = "";
     screenNumber.textContent = "ERROR";
+
+    document.querySelectorAll("button").forEach(button => {
+        if (button.id === "ac") return
+        else button.setAttribute("disabled", "true");
+    })
 }
