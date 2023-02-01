@@ -1,13 +1,14 @@
 let num1 = "";
 let num2 = "";
 let operator = "";
+let ans = "";
 
 const screenEquation = document.querySelector("#screen-equation");
 const screenNumber = document.querySelector("#screen-number");
 
 document.querySelectorAll(".number").forEach(button => button.addEventListener('click', () => {
-    // Only allow 1 decimal symbol
     if (button.id === "decimal" && screenNumber.textContent.includes(".")) return;
+    // if (screenNumber.textContent == "0") screenNumber.textContent = "";
     screenNumber.textContent += button.textContent;
 }))
 
@@ -48,7 +49,6 @@ document.querySelector("#equal-operator").addEventListener('click', () => {
     screenNumber.textContent = result;
 
     num1 = result;
-    operator = "";
 })
 
 document.querySelector("#ac").addEventListener('click', () => {
@@ -56,8 +56,8 @@ document.querySelector("#ac").addEventListener('click', () => {
 })
 
 function calculate(a, b, operator) {
-    if (!a && !b && !operator) return 0
-    else if (!b || !operator) return a;
+    if (a === "" && b === "" && !operator) return 0
+    else if (b === "" || !operator) return a;
 
     let result;
     switch (operator) {
@@ -78,10 +78,10 @@ function calculate(a, b, operator) {
     return result;
 }
 
-function clearScreen() {
+function clear() {
     num1 = "";
     num2 = "";
     operator = "";
     screenEquation.textContent = "";
-    screenEquation.textContent = "";
+    screenNumber.textContent = "";
 }
