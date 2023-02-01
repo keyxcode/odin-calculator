@@ -66,6 +66,9 @@ document.querySelector("#ac").addEventListener('click', () => {
 })
 
 document.querySelector("#del").addEventListener('click', () => {
+    // In this case, this is showing a result, not in the process of inputting a number
+    if (num1 && !currentOperator) return;
+
     screenNumber.textContent = screenNumber.textContent.split('').slice(0, -1).join('');
     if (screenNumber.textContent === "") screenNumber.textContent = "0";
 })

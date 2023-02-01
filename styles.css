@@ -29,10 +29,12 @@ body {
 }
 
 #calc-body {
+    font-family: "Audiowide", sans-serif;
+    font-size: x-large;
     background-color: var(--darkest);
     border: 3px solid var(--dark);
     width: 300px;
-    padding: 40px;
+    padding: 20px;
     border-radius: 5px;
     margin: 0 20px;
 }
@@ -48,7 +50,7 @@ body {
 }
 
 #screen-equation, #screen-number {
-    min-height: 25px;
+    min-height: 50px;
     word-wrap: break-word;
 }
 
@@ -67,6 +69,8 @@ body {
 }
 
 button {
+    font-family: "Audiowide", sans-serif;
+    font-size: x-large;
     outline: none;
     border: none;
     background-color: var(--button);
