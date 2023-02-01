@@ -66,8 +66,8 @@ document.querySelector("#ac").addEventListener('click', () => {
 })
 
 document.querySelector("#del").addEventListener('click', () => {
-    if (screenNumber.textContent === "") screenNumber.textContent = "0";
     screenNumber.textContent = screenNumber.textContent.split('').slice(0, -1).join('');
+    if (screenNumber.textContent === "") screenNumber.textContent = "0";
 })
 
 function calculate(a, b, operator) {
