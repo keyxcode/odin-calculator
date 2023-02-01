@@ -1,4 +1,4 @@
-let num1 = "";
+let num1 = 0;
 let num2 = "";
 let operator = "";
 
