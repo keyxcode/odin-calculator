@@ -3,39 +3,38 @@ let num2 = "";
 let currentOperator = "";
 let chainedOperator = "";
 
-const screenEquation = document.querySelector("#screen-equation");
-const screenNumber = document.querySelector("#screen-number");
+const displayedEquation = document.querySelector("#screen-equation");
+const displayedNumber = document.querySelector("#screen-number");
 
 document.querySelectorAll(".number").forEach(button => button.addEventListener('click', () => {
-    if (button.id === "decimal" && screenNumber.textContent.includes(".")) return;
+    if (button.id === "decimal" && displayedNumber.textContent.includes(".")) return;
+    // This happens after a calculation is made
     if (num1 != "" && currentOperator === "") clear();
-    if (screenNumber.textContent === "0" && button.textContent != ".") screenNumber.textContent = "";
+    if (displayedNumber.textContent === "0" && button.textContent != ".") displayedNumber.textContent = "";
 
-    screenNumber.textContent = removeCommasFromNumber(screenNumber.textContent);
-    screenNumber.textContent += button.textContent;
-    screenNumber.textContent = addCommasToNumber(screenNumber.textContent);
+    displayedNumber.textContent = removeCommasFromNumber(displayedNumber.textContent);
+    displayedNumber.textContent += button.textContent;
+    displayedNumber.textContent = addCommasToNumber(displayedNumber.textContent);
 }))
 
 document.querySelectorAll(".operator").forEach(button => button.addEventListener("click", () => {
-    screenEquation.textContent = `${addCommasToNumber(num1)} ${currentOperator}`;
-
+    // This case only happens at the beginning or after pressing AC
     if (num1 === "" && num2 === "") {
-        num1 = parseFloat(removeCommasFromNumber(screenNumber.textContent));
+        num1 = parseFloat(removeCommasFromNumber(displayedNumber.textContent));
 
         currentOperator = button.textContent;
-        screenEquation.textContent = `${addCommasToNumber(num1)} ${currentOperator}`;
-        screenNumber.textContent = "";
+        displayedEquation.textContent = `${addCommasToNumber(num1)} ${currentOperator}`;
+        displayedNumber.textContent = "";
     } else {
-        // num1 is already in memory
+        // In this case, num1 is already in memory
         // if there's nothing in the screenNumber, that means user wants to change operator
-        if (screenNumber.textContent === "") {
+        if (displayedNumber.textContent === "") {
             currentOperator = button.textContent; 
-            screenEquation.textContent = `${addCommasToNumber(num1)} ${currentOperator}`;
+            displayedEquation.textContent = `${addCommasToNumber(num1)} ${currentOperator}`;
         }
-
-        // otherwise, parse num2, calculate based on currentOperator and save chainedOperator in memory
+        // otherwise, user is done inputting num2 and wants to chain calculation
         chainedOperator = button.textContent;
-        num2 = parseFloat(removeCommasFromNumber(screenNumber.textContent));
+        num2 = parseFloat(removeCommasFromNumber(displayedNumber.textContent));
         if (isNaN(num2)) {
             return;
         };
@@ -45,8 +44,8 @@ document.querySelectorAll(".operator").forEach(button => button.addEventListener
             showError();
             return;
         }
-        screenEquation.textContent = `${addCommasToNumber(result)} ${chainedOperator}`;
-        screenNumber.textContent = "";
+        displayedEquation.textContent = `${addCommasToNumber(result)} ${chainedOperator}`;
+        displayedNumber.textContent = "";
         num1 = result;
         num2 = "";
         currentOperator = chainedOperator;
@@ -55,7 +54,7 @@ document.querySelectorAll(".operator").forEach(button => button.addEventListener
 }))
 
 document.querySelector("#equal-operator").addEventListener('click', () => {
-    if (currentOperator) num2 = parseFloat(screenNumber.textContent.replace(/,/g, ''));
+    if (currentOperator) num2 = parseFloat(removeCommasFromNumber(displayedNumber.textContent));
     else return;
     if (isNaN(num2)) {
         return;
@@ -66,8 +65,8 @@ document.querySelector("#equal-operator").addEventListener('click', () => {
         showError();
         return;
     }
-    screenEquation.textContent = `${addCommasToNumber(num1)} ${currentOperator} ${addCommasToNumber(num2)} =`
-    screenNumber.textContent = addCommasToNumber(result);
+    displayedEquation.textContent = `${addCommasToNumber(num1)} ${currentOperator} ${addCommasToNumber(num2)} =`
+    displayedNumber.textContent = addCommasToNumber(result);
     num1 = result;
     num2 = "";
     currentOperator = "";
@@ -80,10 +79,10 @@ document.querySelector("#ac").addEventListener('click', () => {
 document.querySelector("#del").addEventListener('click', () => {
     // In this case, this is showing a result, not in the process of inputting a number
     if (num1 && !currentOperator) return;
-    if (screenNumber.textContent === "") return;
+    if (displayedNumber.textContent === "") return;
 
-    screenNumber.textContent = screenNumber.textContent.split('').slice(0, -1).join('');
-    if (screenNumber.textContent === "") screenNumber.textContent = "0";
+    displayedNumber.textContent = displayedNumber.textContent.split('').slice(0, -1).join('');
+    if (displayedNumber.textContent === "") displayedNumber.textContent = "0";
 })
 
 function calculate(a, b, operator) {
@@ -119,8 +118,8 @@ function clear() {
     num2 = "";
     currentOperator = "";
     chainedOperator = "";
-    screenEquation.textContent = "";
-    screenNumber.textContent = "0";
+    displayedEquation.textContent = "";
+    displayedNumber.textContent = "0";
 
     document.querySelectorAll("button").forEach(button => {
         button.removeAttribute("disabled");
@@ -132,8 +131,8 @@ function showError() {
     num2 = "";
     currentOperator = "";
     chainedOperator = "";
-    screenEquation.textContent = "";
-    screenNumber.textContent = "ERROR";
+    displayedEquation.textContent = "";
+    displayedNumber.textContent = "ERROR";
 
     document.querySelectorAll("button").forEach(button => {
         if (button.id === "ac") return
