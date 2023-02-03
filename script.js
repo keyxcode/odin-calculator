@@ -39,7 +39,7 @@ document.querySelectorAll(".operator").forEach(button => button.addEventListener
             return;
         };
 
-        result = calculate(num1, num2, currentOperator);
+        let result = calculate(num1, num2, currentOperator);
         if (result === "ERROR") {
             showError();
             return;
@@ -60,7 +60,7 @@ document.querySelector("#equal-operator").addEventListener('click', () => {
         return;
     };
 
-    result = calculate(num1, num2, currentOperator);
+    let result = calculate(num1, num2, currentOperator);
     if (result === "ERROR") {
         showError();
         return;
